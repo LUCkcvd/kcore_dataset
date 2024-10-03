@@ -1,0 +1,40 @@
+~Preliminaries~
+-Make sure you use 'git pull origin main' on whatever repository to make sure it's up to date
+Following with the proper cmake and make commands thereafter.
+-In the kncore_dataset directory make sure you use 'rm dmax*' to remove any histograms that
+were from prior construct_sketches operations. While this is probably redundant, it's just
+good to make sure we're starting fresh.
+-before you start any qurey operations run the following command in gdb:
+run --operation construct_sketches --algo distancescan --dataset dblp -k 16 -d 1.4
+
+~How to run query operations~
+type the following in gdb:
+b query.h:286
+run --operation query --algo distancescan --dataset dblp <whatever decided parameters>
+[this is the part you set up file logging if this is the first experiment you're running]
+p cluster_result
+
+after the cluster results are printed, go ahead move the result.log file to whatever experiments folder you are using and run the resultLogProcessing.sh file (make sure the two files are in the same directory). This will create result_lines.log.
+
+~postprocessing~
+make sure 'result_lines.log' and 'DBLPtitles.txt' are in the same directory as nodeToTitle.py before running the code.
+type the following command:
+python3 nodeToTitle.py
+you should get an output file of JournalTitleClusters.txt. This is the file that everyone is looking for.
+
+
+~How to organize experiments~
+make new directories for every new experiment you run. Make sure you make a parameters.txt file that contain the specific parameters you've used for the experiment. I've uploaded some examples to the oneDrive that you can look at, it doesn't need to be exact.
+
+~how to set up file logging~
+you would type this in after the run command:
+set max-value-size unlimited
+set print elements 0
+set print repeats 0 
+set pagination off
+set logging file results.log
+set logging enabled on
+
+
+IMPORTANT:
+make sure that the 'results.log' file is moved from the distancescan directory after every experiment otherwise everything you print will be appended to the file, making it an absolute mess.
